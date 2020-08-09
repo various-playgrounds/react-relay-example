@@ -1,31 +1,31 @@
-const {
+import {
 	Environment,
 	Network,
 	RecordSource,
 	Store,
-} = require('relay-runtime');
-
-const store = new Store(new RecordSource());
-
-const network = Network.create((operation, variables) => {
+  } from 'relay-runtime';
+  
+  function fetchQuery(
+	operation,
+	variables,
+  ) {
 	return fetch('http://localhost:4000/graphql', {
-		method: 'POST',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: operation.text,
-			variables,
-		}),
-	}).then(resp => {
-		return resp.json();
-	})
-})
-
-const environment = new Environment({
-	network,
-	store,
-});
-
-export default environment;
+	  method: 'POST',
+	  headers: {
+		'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify({
+		query: operation.text,
+		variables,
+	  }),
+	}).then(response => {
+	  return response.json();
+	});
+  }
+  
+  const environment = new Environment({
+	network: Network.create(fetchQuery),
+	store: new Store(new RecordSource()),
+  });
+  
+  export default environment;

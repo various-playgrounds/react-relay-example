@@ -1,46 +1,31 @@
-// your-app-name/src/App.js
 import React from 'react';
-import fetchGraphQL from './fetchGraphQL';
+import { QueryRenderer} from 'react-relay';
+import graphql from 'babel-plugin-relay/macro';
+import environment from './environment';
 
-const { useState, useEffect } = React;
+// const environment = require('./environment');
 
-function App() {
-  // We'll load the name of a repository, initially setting it to null
-  const [name, setName] = useState(null);
-
-  // When the component mounts we'll fetch a repository name
-  useEffect(() => {
-    let isMounted = true;
-    fetchGraphQL(`
-      query helloQuery {
-        hello
-      }
-    `).then(response => {
-      // Avoid updating state if the component unmounted before the fetch completes
-      if (!isMounted) {
-        return;
-      }
-      const data = response.data;
-      setName(data.hello);
-    }).catch(error => {
-      console.error(error);
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [fetchGraphQL]);
-
-  // Render "Loading" until the query completes
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          {name != null ? `response: ${name}` : "Loading"}
-        </p>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  render() {
+    return (
+      <QueryRenderer
+        environment={environment}
+        query={graphql`
+          query AppQuery {
+            hello
+          }
+        `}
+        variables={{}}
+        render={({error, props}) => {
+          if (error) {
+            return <div>Error!</div>;
+          }
+          if (!props) {
+            return <div>Loading...</div>;
+          }
+          return <div>{props.hello}</div>;
+        }}
+      />
+    );
+  }
 }
-
-export default App;
