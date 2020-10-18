@@ -1,3 +1,11 @@
-type Query {
+  type TodoItem {
+    name: String!
+  }
+  type TodoList {
+    name: String!
+    items: [TodoItem]
+  }
+  type Query {
     hello: String
-}
+    todoList: TodoList
+  }

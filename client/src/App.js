@@ -2,8 +2,7 @@ import React from 'react';
 import { QueryRenderer} from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import environment from './environment';
-
-// const environment = require('./environment');
+import ComponentUsingFragment from './components/ComponentUsingFragment';
 
 export default class App extends React.Component {
   render() {
@@ -13,6 +12,9 @@ export default class App extends React.Component {
         query={graphql`
           query AppQuery {
             hello
+            todoList {
+              ...ComponentUsingFragment_todoList
+            }
           }
         `}
         variables={{}}
@@ -23,7 +25,14 @@ export default class App extends React.Component {
           if (!props) {
             return <div>Loading...</div>;
           }
-          return <div>{props.hello}</div>;
+          return (
+            <div>
+              {props.hello}
+              <div>
+                <ComponentUsingFragment todoList={props.todoList}/>
+              </div>
+            </div>
+          );
         }}
       />
     );
