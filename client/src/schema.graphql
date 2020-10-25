@@ -1,5 +1,6 @@
   type TodoItem {
     name: String!
+    id: String!
   }
   type TodoList {
     name: String!
@@ -8,4 +9,5 @@
   type Query {
     hello: String
     todoList: TodoList
+    todoItem(id: String!): TodoItem
   }

@@ -11,7 +11,7 @@ class ComponentUsingFragment extends React.Component {
                 <span>{todoList.name}</span>
                 <ul>
                     {todoList.items.map(item => {
-                        return <li>{item.name}</li>
+                        return <li key={item.id}>{item.name}</li>
                     })}
                 </ul>
             </div>
@@ -25,6 +25,7 @@ export default createFragmentContainer(ComponentUsingFragment, {
             name
             items {
                 name
+                id
             }
         }
     `

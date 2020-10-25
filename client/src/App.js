@@ -3,6 +3,7 @@ import { QueryRenderer} from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import environment from './environment';
 import ComponentUsingFragment from './components/ComponentUsingFragment';
+import ComponentUsingRefetchContainer from './components/ComponentUsingRefetchContainer';
 
 export default class App extends React.Component {
   render() {
@@ -10,14 +11,19 @@ export default class App extends React.Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query AppQuery {
+          query AppQuery ($id: String!) {
             hello
             todoList {
               ...ComponentUsingFragment_todoList
             }
+            todoItem(id: $id) {
+              ...ComponentUsingRefetchContainer_todoItem @arguments(id: $id)
+            }
           }
         `}
-        variables={{}}
+        variables={{
+          id: '',
+        }}
         render={({error, props}) => {
           if (error) {
             return <div>Error!</div>;
@@ -30,6 +36,7 @@ export default class App extends React.Component {
               {props.hello}
               <div>
                 <ComponentUsingFragment todoList={props.todoList}/>
+                <ComponentUsingRefetchContainer todoItem={props.todoItem}/>
               </div>
             </div>
           );

@@ -7,6 +7,7 @@ const cors = require('cors')
 var schema = buildSchema(`
   type TodoItem {
     name: String!
+    id: String!
   }
   type TodoList {
     name: String!
@@ -15,6 +16,7 @@ var schema = buildSchema(`
   type Query {
     hello: String
     todoList: TodoList
+    todoItem(id: String!): TodoItem
   }
 `);
 
@@ -22,13 +24,16 @@ const fakeTodoList = {
   name: 'TodoList',
   items: [
     {
-      name: 'item1'
+      name: 'item1',
+      id: '1',
     },
     {
-      name: 'item2'
+      name: 'item2',
+      id: '2',
     },
     {
-      name: 'item3'
+      name: 'item3',
+      id: '3',
     }
   ]
 };
@@ -40,6 +45,12 @@ var root = {
   },
   todoList: () => {
     return fakeTodoList;
+  },
+  todoItem: ({id}) => {
+    const res = fakeTodoList.items.filter((item) => {
+      return item.id === id;
+    });
+    return res.length > 0? res[0]: null;
   }
 };
 
