@@ -28,9 +28,9 @@ class ComponentUsingRefetchContainer extends React.Component {
         }
         return (
             <div>
-                <span>name: {todoItem.name}</span>
                 <input type="text" value={this.state.value} onChange={this.handleChange} />
-                <button onPress={this._refetch} title="refresh" />
+                <button onClick={this._refetch}>refresh</button>
+                <span>name: {todoItem.name}</span>
             </div>
         )
     }
@@ -41,6 +41,7 @@ class ComponentUsingRefetchContainer extends React.Component {
             null,
             () => {
                 console.log('Refetch done');
+                this.props.setId(this.state.value);
             },
             {force: true},
         )

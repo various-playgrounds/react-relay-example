@@ -6,6 +6,17 @@ import ComponentUsingFragment from './components/ComponentUsingFragment';
 import ComponentUsingRefetchContainer from './components/ComponentUsingRefetchContainer';
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: ''
+    };
+  }
+  updateId = (id) => {
+    this.setState({
+      id,
+    })
+  }
   render() {
     return (
       <QueryRenderer
@@ -22,7 +33,7 @@ export default class App extends React.Component {
           }
         `}
         variables={{
-          id: '',
+          id: this.state.id,
         }}
         render={({error, props}) => {
           if (error) {
@@ -36,7 +47,7 @@ export default class App extends React.Component {
               {props.hello}
               <div>
                 <ComponentUsingFragment todoList={props.todoList}/>
-                <ComponentUsingRefetchContainer todoItem={props.todoItem}/>
+                <ComponentUsingRefetchContainer todoItem={props.todoItem} setId={this.updateId} />
               </div>
             </div>
           );
