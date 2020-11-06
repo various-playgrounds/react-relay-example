@@ -10,4 +10,5 @@
     hello: String
     todoList: TodoList
     todoItem(id: String!): TodoItem
+    todoListPagination(skip: Int, take: Int): TodoList
   }

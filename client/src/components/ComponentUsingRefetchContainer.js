@@ -43,7 +43,6 @@ class ComponentUsingRefetchContainer extends React.Component {
                 console.log('Refetch done');
                 this.props.setId(this.state.value);
             },
-            {force: true},
         )
     }
 }

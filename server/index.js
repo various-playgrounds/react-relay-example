@@ -17,6 +17,7 @@ var schema = buildSchema(`
     hello: String
     todoList: TodoList
     todoItem(id: String!): TodoItem
+    todoListPagination(skip: Int, take: Int): TodoList
   }
 `);
 
@@ -38,6 +39,48 @@ const fakeTodoList = {
   ]
 };
 
+const fakeTodoListPagination = {
+  name: 'todoListPagination',
+  items: [
+    {
+      name: 'item1',
+      id: '1',
+    },
+    {
+      name: 'item2',
+      id: '2',
+    },
+    {
+      name: 'item3',
+      id: '3',
+    },
+    {
+      name: 'item4',
+      id: '4',
+    },
+    {
+      name: 'item5',
+      id: '5',
+    },
+    {
+      name: 'item6',
+      id: '6',
+    },
+    {
+      name: 'item7',
+      id: '7',
+    },
+    {
+      name: 'item8',
+      id: '8',
+    },
+    {
+      name: 'item9',
+      id: '9',
+    }
+  ]
+};
+
 // The root provides a resolver function for each API endpoint
 var root = {
   hello: () => {
@@ -51,6 +94,25 @@ var root = {
       return item.id === id;
     });
     return res.length > 0? res[0]: null;
+  },
+  todoListPagination: ({take, skip}) => {
+    if (take != null && skip != null && skip > 0 && take > 0) {
+      return {
+        name: fakeTodoListPagination.name,
+        items: fakeTodoListPagination.items.slice(skip, skip+take),
+      }
+    } else if (skip != null && skip > 0 && take > 0) {
+      return {
+        name: fakeTodoListPagination.name,
+        items: fakeTodoListPagination.items.slice(skip),
+      };
+    } else if (take != null && take > 0) {
+      return {
+        name: fakeTodoListPagination.name,
+        items: fakeTodoListPagination.items.slice(0, take),
+      };
+    }
+    return fakeTodoListPagination;
   }
 };
 
